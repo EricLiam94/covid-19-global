@@ -1,5 +1,11 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+}
+
 .App {
   text-align: center;
+  min-height: 100vh;
   font-family: "Ubuntu", sans-serif;
   background: -webkit-gradient(
     linear,
@@ -9,6 +15,7 @@
     color-stop(50%, #1a2028),
     to(#293845)
   );
+
   background-position: fixed;
   background: linear-gradient(to bottom, #000 0%, #1a2028 50%, #293845 100%);
 }
@@ -25,7 +32,6 @@
 }
 
 .App-header {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,4 +51,10 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+footer {
+  margin-top: 50px;
+  background-color: #bdc3c7;
+  padding: 10px;
 }

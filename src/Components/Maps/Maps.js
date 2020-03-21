@@ -35,6 +35,7 @@ const Maps = () => {
     const data = await fetch(url);
     const res = await data.text();
     const out = await csv().fromString(res);
+
     setdata(out);
   };
   const onMouseOver = item => {

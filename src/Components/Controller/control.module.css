@@ -1,0 +1,69 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+  width: 100%;
+  align-self: stretch;
+  margin: auto;
+  flex-direction: row-reverse;
+}
+
+.arealist {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+
+  width: 230px;
+}
+
+.arealist input {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+.list {
+  list-style: none;
+}
+
+.list li {
+  transition: 0.4s ease-in;
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 3px 0;
+}
+.list li:hover {
+  background-color: black;
+}
+
+/* Scroll bar for arealist */
+.arealist::-webkit-scrollbar {
+  width: 12px;
+  background-color: #f5f5f5;
+}
+
+.arealist::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+  border-radius: 10px;
+}
+
+.arealist::-webkit-scrollbar {
+  width: 10px;
+  background-color: #f5f5f5;
+}
+
+.arealist::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.44, rgb(122, 153, 217)),
+    color-stop(0.72, rgb(73, 125, 189)),
+    color-stop(0.86, rgb(28, 58, 148))
+  );
+}
