@@ -5,8 +5,12 @@ const Charts = ({ name, dates, confirmed, recovered, deaths }) => {
   var options = {
     title: {
       text: name,
-      floating: true,
+
       margin: 10,
+      style: { color: "white" }
+    },
+    subtitle: {
+      text: "Confirmed, Recovered and Deaths charts",
       style: { color: "white" }
     },
     chart: {

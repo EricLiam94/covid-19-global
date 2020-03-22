@@ -16,6 +16,49 @@
   }
 }
 
+.card {
+  border: 1px solid black;
+  background: #404040;
+  padding: 1px 20px;
+  width: 33%;
+}
+
+.cardname {
+  margin-bottom: 10px;
+}
+
+.cards {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.single {
+  border-bottom: 0.5px solid grey;
+  padding: 5px;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+}
+.single:hover {
+  opacity: 0.4;
+}
+
+.single span {
+  font-weight: 400;
+  font-size: 10px;
+}
+
+.card .single:last-child {
+  border-bottom: none;
+}
+
+.cardlist {
+  list-style: none;
+}
+
 .main {
   width: 80%;
   margin: auto;
@@ -23,6 +66,7 @@
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
+  margin-bottom: 40px;
   align-items: center;
 }
 

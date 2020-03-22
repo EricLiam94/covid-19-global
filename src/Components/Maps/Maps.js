@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
-import ReactMapGL, { Marker } from "react-map-gl";
+import ReactMapGL, {
+  Marker,
+  LinearInterpolator,
+  FlyToInterpolator
+} from "react-map-gl";
 import csv from "csvtojson";
 import style from "./Maps.module.css";
+import Card from "./Card";
 
 const Maps = () => {
   const [viewport, setViewport] = useState({
@@ -35,12 +40,10 @@ const Maps = () => {
     const data = await fetch(url);
     const res = await data.text();
     const out = await csv().fromString(res);
-
     setdata(out);
   };
   const onMouseOver = item => {
     setDisplay(item);
-    console.log(item);
   };
 
   const onMouseOut = () => {
@@ -49,8 +52,8 @@ const Maps = () => {
 
   const color = {
     Confirmed: "#f39c12",
-    Recovered: "#2ecc71",
-    Deaths: "#c0392b"
+    Recovered: "#218c74",
+    Deaths: "#b33939"
   };
 
   useEffect(() => {
@@ -58,6 +61,17 @@ const Maps = () => {
     return;
   }, []);
 
+  const handleClick = (long, lat) => {
+    const view = {
+      ...viewport,
+      longitude: parseFloat(long),
+      latitude: parseFloat(lat),
+      transitionDuration: 1000,
+      transitionInterpolator: new FlyToInterpolator(),
+      zoom: 4
+    };
+    setViewport(view);
+  };
   const APK =
     "pk.eyJ1IjoiZXJpY2xpYW0iLCJhIjoiY2s2OTB1cTVjMGFybTNtbXJ3YjlneHhkcSJ9.m3XezVm8VJ4W-UJl4x6U7w";
 
@@ -114,6 +128,28 @@ const Maps = () => {
             onMouseOut={onMouseOut}
           />
         </ReactMapGL>
+      </div>
+      <div className={style.cards}>
+        <Card
+          data={data.slice(0, 5)}
+          name="Confirmed"
+          handleClick={handleClick}
+          color={color["Confirmed"]}
+        />
+        <Card
+          data={data
+            .sort((a, b) => b["Recovered"] - a["Recovered"])
+            .slice(0, 5)}
+          name="Recovered"
+          handleClick={handleClick}
+          color={color["Recovered"]}
+        />
+        <Card
+          data={data.sort((a, b) => b["Deaths"] - a["Deaths"]).slice(0, 5)}
+          name="Deaths"
+          handleClick={handleClick}
+          color={color["Deaths"]}
+        />
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import "./App.css";
 import Maps from "./Components/Maps/Maps";
 import Charts from "./Components/Charts/Charts";
 import Controller from "./Components/Controller/Controller";
-
+import Guide from "./Components/Guide/Guide";
 function App() {
   return (
     <div className="App">
@@ -13,10 +13,12 @@ function App() {
         <Maps />
         <Controller />
         <Charts />
+        <Guide />
       </header>
       <footer>
         {" "}
-        Data retrieved from <a> https://github.com/CSSEGISandData/COVID-19 </a>
+        Data retrieved from{" "}
+        <a href=" https://github.com/CSSEGISandData/COVID-19"> Here </a>
       </footer>
     </div>
   );
