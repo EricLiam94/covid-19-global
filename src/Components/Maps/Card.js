@@ -12,13 +12,13 @@ const Card = ({ name, data, handleClick, color }) => {
           <li
             key={idx}
             className={style.single}
-            onClick={() => handleClick(area["Longitude"], area["Latitude"])}
+            onClick={() => handleClick(area["Long_"], area["Lat"])}
           >
             {" "}
             <div>
               {" "}
-              {area["Country/Region"]}{" "}
-              <span> {area["Province/State"] || ""} </span>
+              {area["Country_Region"]}{" "}
+              <span> {area["Province_State"] || ""} </span>
             </div>
             <div style={{ color: color }}> {area[name]} </div>
           </li>
@@ -27,4 +27,5 @@ const Card = ({ name, data, handleClick, color }) => {
     </div>
   );
 };
+
 export default Card;

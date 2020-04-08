@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Chart from "react-apexcharts";
 
-const Charts = ({ name, dates, confirmed, recovered, deaths }) => {
+const Charts = ({ name, dates, confirmed, deaths }) => {
   var options = {
     title: {
       text: name,
@@ -10,7 +10,7 @@ const Charts = ({ name, dates, confirmed, recovered, deaths }) => {
       style: { color: "white" }
     },
     subtitle: {
-      text: "Confirmed, Recovered and Deaths charts",
+      text: "Confirmed and Deaths charts",
       style: { color: "white" }
     },
     chart: {
@@ -54,7 +54,6 @@ const Charts = ({ name, dates, confirmed, recovered, deaths }) => {
       name: "Confirmed",
       data: confirmed
     },
-    { name: "Recovered", data: recovered },
     { name: "Deaths", data: deaths }
   ];
   return (

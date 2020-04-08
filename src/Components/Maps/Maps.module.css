@@ -4,7 +4,13 @@
   width: 15px;
   height: 15px;
   opacity: 0.6;
-  animation: grow 0.8s alternate infinite;
+  /* animation: grow 0.8s alternate infinite; */
+}
+
+.titlename {
+  margin-bottom: 5px;
+  font-size: 18px;
+  font-family: monospace;
 }
 
 @keyframes grow {
@@ -98,12 +104,22 @@
   flex-grow: 1;
   font-weight: bold;
 }
-.btns div:nth-child(1) {
+.btns div:first-child {
   border-radius: 10px 0 0 0;
 }
 
-.btns div:nth-child(3) {
+.btns div:last-child {
   border-radius: 0 10px 0 0;
+}
+
+.update {
+  width: 100%;
+  text-align: right;
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-family: "Courier New", Courier, monospace;
+  margin-right: 5px;
+  color: #dcdde1;
 }
 
 .tooltips {

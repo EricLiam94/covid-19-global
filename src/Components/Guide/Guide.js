@@ -7,8 +7,8 @@ const Guide = () => {
     height: "480",
     width: "840",
     playerVars: {
-      autoplay: 0
-    }
+      autoplay: 0,
+    },
   };
 
   return (

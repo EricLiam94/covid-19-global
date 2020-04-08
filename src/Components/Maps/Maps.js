@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactMapGL, {
   Marker,
   LinearInterpolator,
-  FlyToInterpolator
+  FlyToInterpolator,
 } from "react-map-gl";
 import csv from "csvtojson";
 import style from "./Maps.module.css";
@@ -13,15 +13,17 @@ const Maps = () => {
     width: "100%",
     height: "100%",
     latitude: 37.7577,
-    longitude: -122.4376,
-    zoom: 2
+    longitude: 22.4376,
+    zoom: 2,
+    minZoom: 1,
   });
-  const [type, setType] = useState("Confirmed");
+  const [update, setUpdate] = useState("");
+  const [type, setType] = useState("Recovered");
   const [data, setdata] = useState([]);
   const [display, setDisplay] = useState(null);
-  const getFormattedDate = () => {
+  const getFormattedDate = (predate) => {
     var date = new Date();
-    date.setDate(date.getDate() - 2);
+    date.setDate(date.getDate() - predate);
     var year = date.getFullYear();
 
     var month = (1 + date.getMonth()).toString();
@@ -32,17 +34,24 @@ const Maps = () => {
 
     return month + "-" + day + "-" + year;
   };
-  const url =
+  const url = (predate) =>
     "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/" +
-    getFormattedDate() +
+    getFormattedDate(predate) +
     ".csv";
+
   const fetchData = async () => {
-    const data = await fetch(url);
+    var data = await fetch(url(1));
+    setUpdate(getFormattedDate(1));
+    if (data.status === 404) {
+      data = await fetch(url(2));
+      setUpdate(getFormattedDate(2));
+    }
+
     const res = await data.text();
     const out = await csv().fromString(res);
     setdata(out);
   };
-  const onMouseOver = item => {
+  const onMouseOver = (item) => {
     setDisplay(item);
   };
 
@@ -53,7 +62,8 @@ const Maps = () => {
   const color = {
     Confirmed: "#f39c12",
     Recovered: "#218c74",
-    Deaths: "#b33939"
+    Active: "#3742fa",
+    Deaths: "#b33939",
   };
 
   useEffect(() => {
@@ -68,7 +78,7 @@ const Maps = () => {
       latitude: parseFloat(lat),
       transitionDuration: 1000,
       transitionInterpolator: new FlyToInterpolator(),
-      zoom: 4
+      zoom: 4,
     };
     setViewport(view);
   };
@@ -81,24 +91,32 @@ const Maps = () => {
 
   return (
     <div className={style.main}>
+      <div className={style.update}> Last Update: {update}</div>
       <div className={style.btns}>
         <div
           style={{ backgroundColor: color["Confirmed"] }}
-          onClick={e => onButtonClick(e, "Confirmed")}
+          onClick={(e) => onButtonClick(e, "Confirmed")}
           className={type === "Confirmed" ? style.act : ""}
         >
           <div>Confirmed </div>
         </div>
         <div
           style={{ backgroundColor: color["Recovered"] }}
-          onClick={e => onButtonClick(e, "Recovered")}
+          onClick={(e) => onButtonClick(e, "Recovered")}
           className={type === "Recovered" ? style.act : ""}
         >
           <div>Recovered</div>
         </div>
         <div
+          style={{ backgroundColor: color["Active"] }}
+          onClick={(e) => onButtonClick(e, "Active")}
+          className={type === "Active" ? style.act : ""}
+        >
+          <div>Active </div>
+        </div>
+        <div
           style={{ backgroundColor: color["Deaths"] }}
-          onClick={e => onButtonClick(e, "Deaths")}
+          onClick={(e) => onButtonClick(e, "Deaths")}
           className={type === "Deaths" ? style.act : ""}
         >
           <div>Deaths </div>
@@ -107,17 +125,17 @@ const Maps = () => {
       <div className={style.container}>
         {display && (
           <div className={style.tooltips}>
-            <div> Province/State : {display["Province/State"] || "N/A"} </div>
-            <div> Country : {display["Country/Region"]} </div>
+            <div className={style.titlename}> {display["Combined_Key"]} </div>
             <div> Confirmed : {display["Confirmed"]} </div>
             <div> Recovered: {display["Recovered"]} </div>
+            <div> Active: {display["Active"]} </div>
             <div> Deaths: {display["Deaths"]} </div>
           </div>
         )}
         <ReactMapGL
           {...viewport}
           onViewportChange={setViewport}
-          mapStyle="mapbox://styles/mapbox/dark-v9"
+          mapStyle="mapbox://styles/mapbox/dark-v9?optimize=true"
           mapboxApiAccessToken={APK}
         >
           <Markers
@@ -131,7 +149,9 @@ const Maps = () => {
       </div>
       <div className={style.cards}>
         <Card
-          data={data.slice(0, 5)}
+          data={data
+            .sort((a, b) => b["Confirmed"] - a["Confirmed"])
+            .slice(0, 5)}
           name="Confirmed"
           handleClick={handleClick}
           color={color["Confirmed"]}
@@ -155,17 +175,19 @@ const Maps = () => {
   );
 };
 
-const Markers = ({ data, type, onMouseOver, onMouseOut, color }) => {
+const Markers = React.memo(({ data, type, onMouseOver, onMouseOut, color }) => {
   function getBaseLog(x, y) {
     return Math.log(y) / Math.log(x);
   }
+
   return data.map(
     (item, idx) =>
-      item[type] > 0 && (
+      item[type] > 0 &&
+      Number.isFinite(parseFloat(item["Long_"])) && (
         <Marker
           key={idx}
-          longitude={parseInt(item.Longitude)}
-          latitude={parseInt(item.Latitude)}
+          longitude={parseFloat(item["Long_"])}
+          latitude={parseFloat(item["Lat"])}
         >
           <div
             className={style.circle}
@@ -174,7 +196,7 @@ const Markers = ({ data, type, onMouseOver, onMouseOut, color }) => {
             style={{
               width: getBaseLog(2, parseInt(item[type])),
               height: getBaseLog(2, parseInt(item[type])),
-              backgroundColor: color
+              backgroundColor: color,
             }}
           >
             {" "}
@@ -182,6 +204,6 @@ const Markers = ({ data, type, onMouseOver, onMouseOut, color }) => {
         </Marker>
       )
   );
-};
+});
 
 export default Maps;
